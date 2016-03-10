@@ -8,8 +8,10 @@ class AcceptanceTest < Minitest::Test
 
   def run_server(port, app, &block)
     server = Notes::Web.new(app, port: port, host: 'localhost')
-    thread = Thread.new { server.start } # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
-    thread.abort_on_exception = true
+    thread = Thread.new do
+      Thread.current.abort_on_exception = true
+      server.start
+    end # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
     block.call
   ensure
     thread.kill if thread
@@ -30,6 +32,7 @@ class AcceptanceTest < Minitest::Test
       assert_equal "200",              response.code
       assert_equal 'bbq',              response.header['omg']
       assert_equal "hello, class ^_^", response.body
+      assert_equal '/path',            path_info
     end
   end
 
