@@ -1,4 +1,4 @@
-require_relative 'web' # <-- you'll need to make this
+require 'notes/web' # <-- you'll need to make this
 require 'net/http'  # this is from the stdlib
 
 class AcceptanceTest < Minitest::Test
@@ -7,16 +7,27 @@ class AcceptanceTest < Minitest::Test
   end
 
   def run_server(port, app, &block)
-    server = Notes::Web.new(app, port: port, host: 'localhost')
+    server = Notes::Web.new(app, Port: port, Host: 'localhost')
+    # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
     thread = Thread.new do
       Thread.current.abort_on_exception = true
       server.start
-    end # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
+    end
+    wait_for thread
     block.call
   ensure
     thread.kill if thread
     server.stop if server
   end
+
+  def wait_for(thread)
+    loop do
+      break if thread.status == 'sleep' # it is ready for our request
+      raise "The iserver finished without waiting for our request" unless thread.status
+      Thread.pass
+    end
+  end
+
 
   def test_it_accepts_and_responds_to_a_web_request
     path_info = "this value should be overridden by the app!"
@@ -28,11 +39,11 @@ class AcceptanceTest < Minitest::Test
     end
 
     run_server port, app do
-      response = Net::HTTP.get_response('localhost', '/path', port)
+      response = Net::HTTP.get_response('localhost', '/lolol', port)
       assert_equal "200",              response.code
       assert_equal 'bbq',              response.header['omg']
       assert_equal "hello, class ^_^", response.body
-      assert_equal '/path',            path_info
+      assert_equal "/lolol",           path_info
     end
   end
 
