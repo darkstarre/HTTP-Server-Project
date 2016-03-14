@@ -1,4 +1,3 @@
-# require 'rack'
 require 'socket'
 
 
@@ -20,12 +19,12 @@ class Notes
 
       loop do
         socket = @server.accept
-        env = {}
-        method, path, http_version = socket.gets.chomp.split(" ")
-        env['PATH_INFO']      = path
+        # method, path, http_version = socket.gets.chomp.split(" ")
+        # env['PATH_INFO']      = path
+        env = first_response_line(socket)
         response = @app.call(env)
         status = response[0]
-        socket.print "#{http_version} #{status} OK\r\n"
+        socket.print "#{env['HTTP_VERSION']} #{status} OK\r\n"
         response[1].each_pair do |key, value|
           socket.print "#{key}: #{value}" + "\r\n"
         end
@@ -35,6 +34,16 @@ class Notes
         socket.print body
         socket.close
       end
+    end
+
+
+    def first_response_line(socket)
+      env = {}
+      method, path, http_version = socket.gets.chomp.split(" ")
+      env['REQUEST_METHOD'] = method
+      env['PATH_INFO'] = path
+      env['HTTP_VERSION'] = http_version
+      env
     end
   end
 end
