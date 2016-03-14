@@ -1,4 +1,4 @@
-require 'notes/web' # <-- you'll need to make this
+require_relative '../lib/web'
 require 'net/http'  # this is from the stdlib
 
 class AcceptanceTest < Minitest::Test

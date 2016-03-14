@@ -19,11 +19,6 @@ class ParsyUnitTest < Minitest::Test
   Location: http://www.google.com/\r\n +
   Content-Type: text/html; charset=UTF-8\r\n"
   socket = StringIO.new http
-  # env = {}
-  # method, path, http_version = socket.gets.chomp.split(" ")
-  # env['REQUEST_METHOD'] = method
-  # env['PATH_INFO'] = path
-  # env['HTTP_VERSION'] = http_version
   env = first_response_line(socket)
 
   assert_equal "/somepath", env['PATH_INFO']
