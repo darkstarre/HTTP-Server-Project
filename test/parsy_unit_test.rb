@@ -34,6 +34,7 @@ class ParsyUnitTest < Minitest::Test
     assert_equal "http://localhost:9299", env["HTTP_ORIGIN"]
     assert_equal "22", env["CONTENT_LENGTH"]
     assert_equal "application/x-www-form-urlencoded", env["CONTENT_TYPE"]
+    assert_equal "1", env["HTTP_UPGRADE_INSECURE_REQUESTS"]
     assert_equal "Good Grief, let it end", env["BODY"]
 
   end
