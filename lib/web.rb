@@ -21,14 +21,7 @@ class Notes
         socket = @server.accept
         env = Notes::Web.parser(socket)
         first_line, head, body = @app.call(env)
-        socket.print "#{env['HTTP_VERSION']} #{first_line} OK\r\n"
-        head.each_pair do |key, value|
-          socket.print "#{key}: #{value}" + "\r\n"
-        end
-        socket.print "\r\n"
-
-        body = body[0]
-        socket.print body
+        print(socket, env, first_line, head, body)
         socket.close
       end
     end
@@ -51,27 +44,36 @@ class Notes
       env
     end
 
-    def router
-      if path == "/form"
+    def print(socket, env, first_line, head, body)
+      if env['PATH_INFO'] == "/form"
         body = File.read("form.html")
         status = "200"
-        socket.print "#{http_version} #{status} OK\r\n"
+        socket.print "#{env['HTTP_VERSION']} #{status} OK\r\n"
         socket.print "Content-Type: text/html\r\n"
         socket.print "Content-Length: #{body.length}\r\n"
         socket.print "\r\n"
+        socket.print env
+        socket.print "\r\n"
         socket.print body
-      end
 
-      if path.start_with? "/search"
+      elsif env['PATH_INFO'].start_with? "/search"
         path, parameters = path.split("?")
         parameters.split("&").each do |params|
           key, value = params.split("=")
-          puts "#{key} has the value #{value}"
+          socket.print "#{key} has the value #{value}"
+       end
+       
+      else
+        socket.print "#{env['HTTP_VERSION']} #{first_line} OK\r\n"
+        head.each_pair do |key, value|
+          socket.print "#{key}: #{value}" + "\r\n"
         end
+        socket.print "\r\n"
+
+        body = body[0]
+        socket.print body
       end
     end
   end
 end
 
-server = Notes::Web.new({port: "3000", host: "localhost"})
-server.start
