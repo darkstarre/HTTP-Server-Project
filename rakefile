@@ -1,0 +1,16 @@
+task default: :test
+
+desc 'Say helllo!'
+task :hello do
+  puts "hello, world!"
+end
+
+desc 'Run my tests!'
+task :test do
+    sh "bundle exec mrspec"
+end
+
+desc 'Run my Rubocop!'
+task :copper do
+  sh 'rubocop --fail-fast'
+end
