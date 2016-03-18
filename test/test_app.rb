@@ -22,6 +22,6 @@ class TestApp < Minitest::Test
       'BODY'                           => 'lolol=hello+world', # this one is technically not correct, but suits our needs better
     }
 
-    assert_match /<\/form>/, Notes::App.call(env)
+    assert_match /<\/form>/, Notes::Server::App.call(env)
   end
 end

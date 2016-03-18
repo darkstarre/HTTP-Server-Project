@@ -1,4 +1,4 @@
-require_relative '../lib/web'
+require 'notes/server'
 require 'stringio'
 require 'minitest/autorun'
 
@@ -12,7 +12,7 @@ class ParsyUnitTest < Minitest::Test
            "Content-Type: text/html; charset=UTF-8\r\n" \
            "\r\n"
     socket = StringIO.new http
-    env = Notes::Web.parser(socket)
+    env = Notes::Server.parser(socket)
 
     assert_equal "/somepath", env['PATH_INFO']
     assert_equal "POST", env['REQUEST_METHOD']
@@ -29,7 +29,7 @@ class ParsyUnitTest < Minitest::Test
       "\r\n" +
       "Good Grief, let it end."
     socket = StringIO.new string
-    env = Notes::Web.parser(socket)
+    env = Notes::Server.parser(socket)
 
     assert_equal "http://localhost:9299", env["HTTP_ORIGIN"]
     assert_equal "22", env["CONTENT_LENGTH"]
