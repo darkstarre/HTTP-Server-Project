@@ -1,0 +1,45 @@
+h1 {
+  color: #505050;
+  text-align: center;
+  -webkit-text-fill-color: red;
+  -webkit-text-stroke-color: blue;
+  -webkit-text-stroke-width: 3.00px;
+}
+body {
+  background: url(http://i.imgur.com/UtaNewT.jpg) center center;
+  margin: 0;
+}
+
+.img_tattered_flag {
+  display: block;
+  margin: 0 auto;
+  opacity: 0.3;
+}
+
+
+.img_dem_candidates {
+  display: block;
+  margin: 0 auto;
+  opacity: 0.3;
+}
+
+
+.subtitle {
+  text-align: center;
+  -webkit-text-fill-color: blue;
+  -webkit-text-stroke-color: #424242;
+  -webkit-text-stroke-width: 1.00px;
+  font-size: 1.4em;
+}
+
+#input_form {
+  width: 320px;
+  height: 0px;
+  position: absolute;
+  top: 650px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  opacity: 0.7;
+}
+
