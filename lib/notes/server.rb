@@ -64,8 +64,8 @@ class Notes
   end
 end
 
-def pathway( html_file )
-  File.read(File.realdirpath("../../#{html_file}", __FILE__))
+def pathway(html_file)
+   body = File.read("lib/#{html_file}")
 end
 
 App = Proc.new do |env|
@@ -82,9 +82,3 @@ App = Proc.new do |env|
 
 end
 
-
-
-
-
-server = Notes::Server.new(App, {Port: "3000", Host: "localhost"})
-server.start
