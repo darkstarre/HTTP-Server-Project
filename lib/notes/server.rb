@@ -65,7 +65,7 @@ class Notes
 end
 
 def pathway(html_file)
-   body = File.read("lib/#{html_file}")
+   body = File.read("lib/form_http_css/#{html_file}")
 end
 
 App = Proc.new do |env|
